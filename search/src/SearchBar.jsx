@@ -5,7 +5,21 @@ import "./App.css";
 const Searchbar = () => {
   const [word, setWord] = useState("");
   const [suggestions, setValue] = useState([]);
-  const [showValue, setpossibleValue] = useState(false);
+  const [showValue, setPossibleValue] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setPossibleValue(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     if (word) {
@@ -15,18 +29,16 @@ const Searchbar = () => {
         )
         .map((country) => country.name);
       setValue(reValues);
-      setpossibleValue(true);
+      setPossibleValue(true);
     } else {
       setValue([]);
-      setpossibleValue(false);
+      setPossibleValue(false);
     }
   }, [word]);
 
   const valueCh = (event) => {
     setWord(event.target.value);
   };
-
-  
 
   const handleSearch = () => {
     console.log(word);
